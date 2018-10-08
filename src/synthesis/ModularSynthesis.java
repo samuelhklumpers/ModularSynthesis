@@ -2,20 +2,43 @@ package synthesis;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 
 public class ModularSynthesis {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Modular Synthesis");
-
-        setupFrame(frame);
+        //JFrame frame = setupFrame();
+        
+        /*Properties prop = new Properties();
+        
+        prop.setProperty("Input x", "20");
+        prop.setProperty("Input y", "50");
+        
+        try (OutputStream os = new FileOutputStream(new File("config/IdentityNode.config"));)
+        {
+            prop.store(os, "test");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }*/
+        
+        System.out.println(IdentityNode.class.getSimpleName());
     }
 
-    private static void setupFrame(JFrame frame) {
+    private static JFrame setupFrame() {
+        JFrame frame = new JFrame("Modular Synthesis");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         fillFrame(frame);
         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+        
+        return frame;
     }
 
     private static void fillFrame(JFrame frame) {

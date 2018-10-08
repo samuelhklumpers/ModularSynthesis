@@ -4,6 +4,8 @@ import javax.naming.OperationNotSupportedException;
 import java.util.Arrays;
 
 public class DoubleConnection extends Connection {
+    private static final long serialVersionUID = 1799235052737434520L;
+    
     private double[] buff;
 
     DoubleConnection() {

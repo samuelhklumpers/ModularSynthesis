@@ -1,8 +1,6 @@
 package synthesis;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -11,8 +9,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.naming.OperationNotSupportedException;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public abstract class ModularNode extends JPanel {
     private static final long serialVersionUID = -1010939408985658101L;
@@ -62,14 +59,22 @@ public abstract class ModularNode extends JPanel {
         //TODO is this the right pattern for this?
         //TODO configurability
         setBorder(BorderFactory.createLineBorder(new Color(0), 2));
-        this.setPreferredSize(new Dimension(200, 120));
+        setBackground(new Color(0xFFFFFF));
+        setPreferredSize(new Dimension(200, 120));
+
+        setLayout(new BorderLayout());
+        //TODO configurability
+        add(new JLabel(this.getClass().getSimpleName()), BorderLayout.CENTER);
         
         //Properties properties = this.getProperties();
         
         for (Entry<String, Connection> input : in.entrySet())
         {
             //Integer x = Integer.valueOf(properties.getProperty(String.format("%s x", input.getKey())));
+            //TODO this needs a fix, maybe add in a jpanel in west to add the components in a free layout or a gridlayout
+            add(input.getValue(), BorderLayout.WEST);
             input.getValue().setLocation(20, 20);
+            input.getValue().revalidate();
         }
     }
 }

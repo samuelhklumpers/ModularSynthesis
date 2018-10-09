@@ -1,20 +1,9 @@
 package synthesis;
 
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 public class ModularSynthesis {
     public static void main(String[] args) {
@@ -59,7 +48,7 @@ public class ModularSynthesis {
     }
 
     private static void fillFrame(JFrame frame) {
-        JPanel nodePanel = new JPanel();
+        NodePanel nodePanel = new NodePanel();
 
         frame.add(nodePanel, BorderLayout.CENTER);
 
@@ -70,7 +59,7 @@ public class ModularSynthesis {
 
         sideBar.add(nodeBar, BorderLayout.CENTER);
 
-        frame.add(sideBar, BorderLayout.CENTER);
+        frame.add(sideBar, BorderLayout.WEST);
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -87,18 +76,18 @@ public class ModularSynthesis {
     
     static class NodeBar extends JPanel {
         private static final long serialVersionUID = 5916641943671165454L;
-        
-        private JPanel nodePanel;
+
+        private NodePanel nodePanel;
         
         class NodeButton extends JButton {
             private static final long serialVersionUID = 8426554697988695356L;
-            
-            private Constructor<? extends ModularNode> factory;
-            
-            public NodeButton(Class<? extends ModularNode> node) {
+
+            private Constructor<? extends ModularNode> constructor;
+
+            NodeButton(Class<? extends ModularNode> node) {
                 try
                 {
-                    this.factory = node.getConstructor();
+                    this.constructor = node.getConstructor();
                 }
                 catch (NoSuchMethodException | SecurityException e1)
                 {
@@ -106,25 +95,21 @@ public class ModularSynthesis {
                 }
                 
                 add(new JLabel(node.getSimpleName().replace("Node", "")));
-                
-                addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try
-                        {
-                            nodePanel.add(factory.newInstance());
-                        }
-                        catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                                | InvocationTargetException e1)
-                        {
-                            e1.printStackTrace();
-                        }
+
+                addActionListener(e -> {
+                    try
+                    {
+                        nodePanel.add(constructor.newInstance());
+                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                            | InvocationTargetException e1)
+                    {
+                        e1.printStackTrace();
                     }
                 });
             }
         }
-        
-        public NodeBar(JPanel nodePanel) {
+
+        NodeBar(NodePanel nodePanel) {
             this.nodePanel = nodePanel;
             
             setLayout(new GridLayout(0, 1));
@@ -132,15 +117,42 @@ public class ModularSynthesis {
             add(new NodeButton(IdentityNode.class));
         }
     }
-    
-    class NodePanel extends JPanel {
+
+    static class NodePanel extends JPanel {
         private static final long serialVersionUID = 1799239113595611114L;
-        
+
+        private JComponent drawingLayer;
+
+        NodePanel() {
+            //TODO mouse listeners on the drawing layer?
+            this.drawingLayer = new JComponent() {
+
+            };
+            this.setLayout(null);
+        }
+
+        public void add(ModularNode node) {
+            super.add(node);
+            node.setLocation((int)(Math.random() * getWidth()), (int)(Math.random() * getHeight()));
+            node.setSize(node.getPreferredSize());
+            node.revalidate();
+            repaint();
+        }
+
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            
+
+            //TODO could be moved to only the updating methods to save performance
+//            if (getComponentZOrder(drawingLayer) > 0)
+//            {
+//                setComponentZOrder(drawingLayer, 0);
+//            }
+
             this.paintChildren(g);
+
+            //TODO add a drawinglayer and draw on that to make it overlay
+            //g.drawLine(100,100,500,500);
         }
     }
 }

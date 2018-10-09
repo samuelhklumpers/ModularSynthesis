@@ -1,15 +1,22 @@
 package synthesis;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.naming.OperationNotSupportedException;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public abstract class Connection extends JPanel {
     private static final long serialVersionUID = 4488456006650613649L;
     
     ModularNode parent;
     Connection target; //input nodes have no target?
+
+    Connection() {
+        //TODO configurability, maybe push around
+        setBorder(BorderFactory.createLineBorder(new Color(0), 2, true));
+        setBackground(new Color(0xFF0000));
+        setPreferredSize(new Dimension(10, 10));
+    }
 
     private boolean isOutput() {
         return parent.out.containsValue(this);

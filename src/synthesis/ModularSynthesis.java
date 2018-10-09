@@ -126,12 +126,25 @@ public class ModularSynthesis {
         NodePanel() {
             //TODO mouse listeners on the drawing layer?
             this.drawingLayer = new JComponent() {
-
+                private static final long serialVersionUID = -5757302083016778133L;
+                
+                @Override
+                public void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    
+                    //TODO doesn't work make it work
+                    g.drawLine(100,100,500,500);
+                }
             };
-            this.setLayout(null);
+            
+            add(drawingLayer);
+            drawingLayer.setLocation(0, 0);
+            
+            setLayout(null);
         }
 
         public void add(ModularNode node) {
+            //TODO do layout mgr things so the drawinglayer and this doesn't turn into such a mess
             super.add(node);
             node.setLocation((int)(Math.random() * getWidth()), (int)(Math.random() * getHeight()));
             node.setSize(node.getPreferredSize());
@@ -144,15 +157,20 @@ public class ModularSynthesis {
             super.paintComponent(g);
 
             //TODO could be moved to only the updating methods to save performance
-//            if (getComponentZOrder(drawingLayer) > 0)
-//            {
-//                setComponentZOrder(drawingLayer, 0);
-//            }
+            if (getComponentZOrder(drawingLayer) > 0)
+            {
+                setComponentZOrder(drawingLayer, 0);
+            }
 
             this.paintChildren(g);
-
-            //TODO add a drawinglayer and draw on that to make it overlay
-            //g.drawLine(100,100,500,500);
+        }
+        
+        @Override
+        public void setSize(int width, int height) {
+            //TODO eliminate this with a layoutmgr
+            drawingLayer.setSize(width, height);
+            
+            super.setSize(width, height);
         }
     }
 }

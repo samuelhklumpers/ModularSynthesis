@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.*;
 
-public abstract class Connection extends JPanel {
+abstract class Connection extends JPanel {
     private static final long serialVersionUID = 4488456006650613649L;
     
     ModularNode parent;
@@ -22,11 +22,6 @@ public abstract class Connection extends JPanel {
         return parent.out.containsValue(this);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-         super.paintComponent(g);
-    }
-    
     public void connect(Connection to) {
         if (this.isOutput() == to.isOutput())
         {

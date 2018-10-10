@@ -38,9 +38,9 @@ public class ModularSynthesis {
         
         frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
         
-        frame.setPreferredSize(new Dimension(size.width / 2, size.width / 2));
-        
-        frame.pack();*/
+        frame.setPreferredSize(new Dimension(size.width / 2, size.width / 2));*/
+
+        frame.pack();
         
         frame.setVisible(true);
         
@@ -131,35 +131,45 @@ public class ModularSynthesis {
             public void addLayoutComponent(String name, Component comp) {
                 if (name.equals(DRAWING_LAYER))
                 {
-
+                    //uhh
+                    NodePanel.this.setComponentZOrder(comp, 0);
+                }
+                else
+                {
+                    NodePanel.this.setComponentZOrder(comp, 1);
                 }
             }
 
             @Override
             public void removeLayoutComponent(Component comp) {
-
             }
 
             @Override
             public Dimension preferredLayoutSize(Container parent) {
-                return null;
+                //if this gets called something has severely gone to shit
+                //TODO configurability get the preferredsize default?
+                return new Dimension(200, 120);
             }
 
             @Override
             public Dimension minimumLayoutSize(Container parent) {
+                //dito
                 return null;
             }
 
             @Override
             public void layoutContainer(Container parent) {
-
+                drawingLayer.setSize(parent.getSize());
             }
         }
 
         NodePanel() {
             //TODO mouse listeners on the drawing layer?
             this.drawingLayer = new JComponent() {
-
+                @Override
+                public void paintComponent(Graphics g) {
+                    g.drawLine(100, 100, 400, 400);
+                }
             };
 
             this.setLayout(new NodeLayout());
@@ -180,21 +190,7 @@ public class ModularSynthesis {
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            //TODO could be moved to only the updating methods to save performance
-//            if (getComponentZOrder(drawingLayer) > 0)
-//            {
-//                setComponentZOrder(drawingLayer, 0);
-//            }
-
             this.paintChildren(g);
-        }
-
-        @Override
-        public void setSize(int width, int height) {
-            //TODO eliminate this with a layoutmgr
-            drawingLayer.setSize(width, height);
-
-            super.setSize(width, height);
         }
     }
 }

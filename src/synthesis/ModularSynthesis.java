@@ -163,9 +163,12 @@ public class ModularSynthesis {
             };
 
             this.setLayout(new NodeLayout());
+
+            add(drawingLayer);
         }
 
         public void add(ModularNode node) {
+            //TODO do layout mgr things so the drawinglayer and this doesn't turn into such a mess
             super.add(node);
             node.setLocation((int)(Math.random() * getWidth()), (int)(Math.random() * getHeight()));
             node.setSize(node.getPreferredSize());
@@ -184,9 +187,14 @@ public class ModularSynthesis {
 //            }
 
             this.paintChildren(g);
+        }
 
-            //TODO add a drawinglayer and draw on that to make it overlay
-            //g.drawLine(100,100,500,500);
+        @Override
+        public void setSize(int width, int height) {
+            //TODO eliminate this with a layoutmgr
+            drawingLayer.setSize(width, height);
+
+            super.setSize(width, height);
         }
     }
 }

@@ -123,12 +123,46 @@ public class ModularSynthesis {
 
         private JComponent drawingLayer;
 
+        class NodeLayout implements LayoutManager {
+            private static final String DRAWING_LAYER = "drawing";
+
+            //TODO is there a good reason to make this a layoutmgr2?
+            @Override
+            public void addLayoutComponent(String name, Component comp) {
+                if (name.equals(DRAWING_LAYER))
+                {
+
+                }
+            }
+
+            @Override
+            public void removeLayoutComponent(Component comp) {
+
+            }
+
+            @Override
+            public Dimension preferredLayoutSize(Container parent) {
+                return null;
+            }
+
+            @Override
+            public Dimension minimumLayoutSize(Container parent) {
+                return null;
+            }
+
+            @Override
+            public void layoutContainer(Container parent) {
+
+            }
+        }
+
         NodePanel() {
             //TODO mouse listeners on the drawing layer?
             this.drawingLayer = new JComponent() {
 
             };
-            this.setLayout(null);
+
+            this.setLayout(new NodeLayout());
         }
 
         public void add(ModularNode node) {

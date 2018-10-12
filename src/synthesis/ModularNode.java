@@ -62,19 +62,23 @@ public abstract class ModularNode extends JPanel {
         setBackground(new Color(0xFFFFFF));
         setPreferredSize(new Dimension(200, 120));
 
-        setLayout(new BorderLayout());
+        setLayout(null);
         //TODO configurability
-        add(new JLabel(this.getClass().getSimpleName()), BorderLayout.CENTER);
-        
+        Component label = add(new JLabel(this.getClass().getSimpleName()));
+        //TODO layoutmgr?
+        label.setLocation(getPreferredSize().width / 2 - label.getPreferredSize().width / 2, getPreferredSize().height / 2 - label
+                .getPreferredSize().height / 2);
+        label.setSize(label.getPreferredSize());
+
         //Properties properties = this.getProperties();
         
         for (Entry<String, Connection> input : in.entrySet())
         {
             //Integer x = Integer.valueOf(properties.getProperty(String.format("%s x", input.getKey())));
             //TODO this needs a fix, maybe add in a jpanel in west to add the components in a free layout or a gridlayout
-            add(input.getValue(), BorderLayout.WEST);
+            add(input.getValue());
             input.getValue().setLocation(20, 20);
-            input.getValue().revalidate();
+            input.getValue().setSize(input.getValue().getPreferredSize());
         }
     }
 }

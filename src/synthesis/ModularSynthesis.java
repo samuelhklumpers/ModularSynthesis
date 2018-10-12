@@ -119,12 +119,12 @@ public class ModularSynthesis {
     }
 
     static class NodePanel extends JPanel {
+        private static final String DRAWING_LAYER = "drawing";
         private static final long serialVersionUID = 1799239113595611114L;
 
         private JComponent drawingLayer;
 
         class NodeLayout implements LayoutManager {
-            private static final String DRAWING_LAYER = "drawing";
 
             //TODO is there a good reason to make this a layoutmgr2?
             @Override
@@ -168,7 +168,20 @@ public class ModularSynthesis {
             this.drawingLayer = new JComponent() {
                 @Override
                 public void paintComponent(Graphics g) {
-                    g.drawLine(100, 100, 400, 400);
+                    for (Component comp : NodePanel.this.getComponents())
+                    {
+                        if (comp.getName() != DRAWING_LAYER)
+                        {
+                            ModularNode node = (ModularNode)comp;
+
+                            for (Connection conn : node.in.values())
+                            {
+                                Connection to = conn.target;
+
+                                g.drawLine(conn.getX(), conn.getY(), to.getX(), to.getY());
+                            }
+                        }
+                    }
                 }
             };
 

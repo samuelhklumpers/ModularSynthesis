@@ -2,6 +2,9 @@ package synthesis;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -170,7 +173,7 @@ public class ModularSynthesis {
                 public void paintComponent(Graphics g) {
                     for (Component comp : NodePanel.this.getComponents())
                     {
-                        if (comp.getName() != DRAWING_LAYER)
+                        if (comp instanceof ModularNode)
                         {
                             ModularNode node = (ModularNode)comp;
 
@@ -178,16 +181,63 @@ public class ModularSynthesis {
                             {
                                 Connection to = conn.target;
 
-                                g.drawLine(conn.getX(), conn.getY(), to.getX(), to.getY());
+                                if (to != null)
+                                {
+                                    g.drawLine(conn.getX(), conn.getY(), to.getX(), to.getY());
+                                }
                             }
                         }
                     }
                 }
             };
 
+            //TODO where is the right place to add listeners to things
+
+            drawingLayer.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //TODO popup if rmb
+                    //TODO separate the nodepanel and the drawinglayer into two panels of a superpanel so getComponentAt doesn't return drawinglayer
+                    System.out.println(e.getPoint());
+                    //System.out.println(NodePanel.this.getComponentAt(e.getPoint()));
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    //ignore rmb
+                    //TODO if not shifting set selection else add to selection
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                }
+            });
+
+            drawingLayer.addMouseMotionListener(new MouseMotionListener() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    //TODO move the selection or the background
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                }
+            });
+
             this.setLayout(new NodeLayout());
 
             add(drawingLayer);
+
+            drawingLayer.setFocusable(true);
+            drawingLayer.grabFocus();
         }
 
         public void add(ModularNode node) {
